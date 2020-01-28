@@ -52,6 +52,14 @@ router.get('/showSong/:id', async (req, res) => {
             return res.status(404).json({message: 'Song not found'})
         }
 
+        song.views +=1;
+        song.save(function (err, song) {
+            if (err) return console.error(err);
+            // console.log(song.views + " saved to collection.");
+        });
+
+
+
         res.json(song);
     } catch (e) {
         console.log(e);
@@ -61,6 +69,98 @@ router.get('/showSong/:id', async (req, res) => {
         }
 
         res.status(500).send('sever error on getting single song')
+    }
+});
+
+// Edit single song
+router.put('/editSong/:id', upload.none(), async (req, res) => {
+    console.log(req.body)
+    console.log('single song edited');
+    try {
+        const song = await Song.findById(req.params.id);
+
+        if (!song) {
+            return res.status(404).json({message: 'Song not found'})
+        }
+
+
+
+        song.songName= req.body.songName,
+        song.singer= req.body.singer,
+
+        song.category= req.body.category,
+
+        song.views = req.body.views;
+
+
+        song.save(function (err, song) {
+            if (err) return console.error(err);
+            // console.log(song.views + " saved to collection.");
+        });
+
+
+
+        res.json(song);
+    } catch (e) {
+        console.log(e);
+
+        if (e.kind === 'ObjectId') {
+            return res.status(404).json({message: 'Song not found'})
+        }
+
+        res.status(500).send('sever error on getting single song')
+    }
+});
+
+// get by category
+router.get('/showSongs/:category', async (req, res) => {
+
+    console.log('get by category');
+    console.log(req.query.category);
+    try {
+        const songs = await Song.find({category: req.query.category});
+
+        console.log(songs);
+
+        if (!songs) {
+            return res.status(404).json({message: 'No Song was found'})
+        }
+
+        res.json(songs);
+    } catch (e) {
+        console.log(e);
+
+        if (e.kind === 'ObjectId') {
+            return res.status(404).json({message: 'Song not found'})
+        }
+
+        res.status(500).send('sever error on getting single song')
+    }
+});
+
+// get by singer
+router.get('/showSongsBySinger/:singer', async (req, res) => {
+
+    console.log('get by singer');
+    console.log(req.query);
+    try {
+        const songs = await Song.find({singer: req.query.singer});
+
+        console.log(songs);
+
+        if (!songs) {
+            return res.status(404).json({message: 'No Song was found'})
+        }
+
+        res.json(songs);
+    } catch (e) {
+        console.log(e);
+
+        if (e.kind === 'ObjectId') {
+            return res.status(404).json({message: 'Song not found'})
+        }
+
+        res.status(500).send('sever error on getting songs by singer')
     }
 });
 
@@ -134,7 +234,8 @@ router.post("/addSong", cpUpload, (req, res, next) => {
         songName: req.body.songName,
         singer: req.body.singer,
         songURL: songPath,
-        imageURL: imagePath
+        imageURL: imagePath,
+        category: req.body.category
     });
 
     song.save().then(result => {

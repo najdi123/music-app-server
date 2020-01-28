@@ -1,13 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c3b7905d-07f6-4029-86d7-76c871da5730" name="Default Changelist" comment="" />
+    <list default="true" id="c3b7905d-07f6-4029-86d7-76c871da5730" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/Song.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/Song.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/api/uploadSongs.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api/uploadSongs.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="C:\30\music-app\server\.idea" />
+      </set>
+    </option>
+  </component>
   <component name="ProjectId" id="1WMsnzjxbo0vzAEkmCuNHr9fmNK" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -47,6 +62,8 @@
       <workItem from="1579072136151" duration="155000" />
       <workItem from="1579197204831" duration="12505000" />
       <workItem from="1579472201730" duration="611000" />
+      <workItem from="1579478115381" duration="1665000" />
+      <workItem from="1579792061249" duration="17757000" />
     </task>
     <servers />
   </component>
