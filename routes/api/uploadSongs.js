@@ -2,6 +2,7 @@ const express = require('express');
 const Song = require('../../models/Song');
 const router = express.Router();
 const multer = require('multer');
+const verifyAuth = require('../../verifyToken');
 
 const storage = multer.diskStorage({
     destination: function (req, file, callback) {
@@ -31,6 +32,8 @@ const upload = multer({
     },
     // fileFilter: fileFilter
 });
+
+// get all song
 router.get('/showSongs', async (req, res) => {
 
     console.log('get all songs')
@@ -42,6 +45,7 @@ router.get('/showSongs', async (req, res) => {
     }
 });
 
+// get a single song by id
 router.get('/showSong/:id', async (req, res) => {
 
     console.log('single song');
@@ -52,12 +56,11 @@ router.get('/showSong/:id', async (req, res) => {
             return res.status(404).json({message: 'Song not found'})
         }
 
-        song.views +=1;
+        song.views += 1;
         song.save(function (err, song) {
             if (err) return console.error(err);
             // console.log(song.views + " saved to collection.");
         });
-
 
 
         res.json(song);
@@ -84,20 +87,18 @@ router.put('/editSong/:id', upload.none(), async (req, res) => {
         }
 
 
+        song.songName = req.body.songName,
+            song.singer = req.body.singer,
 
-        song.songName= req.body.songName,
-        song.singer= req.body.singer,
+            song.category = req.body.category,
 
-        song.category= req.body.category,
-
-        song.views = req.body.views;
+            song.views = req.body.views;
 
 
         song.save(function (err, song) {
             if (err) return console.error(err);
             // console.log(song.views + " saved to collection.");
         });
-
 
 
         res.json(song);
@@ -168,8 +169,8 @@ router.delete('/showSong/:id', async (req, res) => {
     try {
         const song = await Song.findById(req.params.id);
 
-        await  song.remove();
-        res.json({ message: 'Song is deleted successfully'});
+        await song.remove();
+        res.json({message: 'Song is deleted successfully'});
     } catch (e) {
         console.log(e);
 
@@ -181,12 +182,57 @@ router.delete('/showSong/:id', async (req, res) => {
     }
 });
 
+// like a song
+router.put('/like/:id', verifyAuth, async (req, res) => {
+    try {
+        const song = await Song.findById(req.params.id);
+
+        if (song.likes.filter(like => like.user.toString() === req.user._id).length > 0) {
+            return res.status(400).json({ message: 'Song already liked' });
+        }
+
+        song.likes.unshift({ user: req.user._id });
+
+        await song.save();
+
+        res.json(song.likes)
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error on like');
+    }
+});
+
+// unlike a previously liked song
+router.put('/unlike/:id', verifyAuth, async (req, res) => {
+    try {
+        const song = await Song.findById(req.params.id);
+
+        if (song.likes.filter(like => like.user.toString() === req.user._id).length === 0) {
+            return res.status(400).json({ message: 'Song has not been liked yet' });
+            console.log('Song not liked')
+        }
+
+        const removeIndex = song.likes
+            .map(like => like.user.toString())
+            .indexOf(req.user._id);
+        song.likes.splice(removeIndex, 1);
+
+        await song.save();
+
+        res.json(song.likes)
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error on unlike');
+    }
+});
+
 var cpUpload = upload.fields([{name: "songURL", maxCount: 1}, {name: "imageURL", maxCount: 1}])
 router.post("/addSong", cpUpload, (req, res, next) => {
 
     console.log(req.files)
     console.log('domdom')
-
 
 
     if (req.files.imageURL[0].fieldname === 'imageURL') {

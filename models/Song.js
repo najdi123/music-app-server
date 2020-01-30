@@ -12,7 +12,15 @@ const songSchema = new Schema({
     },
     category: {
         type: String
-    }
+    },
+    likes: [
+        {
+            user: {
+                type: Schema.Types.ObjectId,
+                ref: 'users'
+            }
+        }
+    ]
 });
 
 module.exports = mongoose.model('Song', songSchema);
