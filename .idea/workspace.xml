@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c3b7905d-07f6-4029-86d7-76c871da5730" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.js" beforeDir="false" afterPath="$PROJECT_DIR$/db.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/Song.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/Song.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/api/uploadSongs.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api/uploadSongs.js" afterDir="false" />
     </list>
@@ -31,7 +32,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../client" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="MTConfigurable" />
   </component>
@@ -63,7 +64,8 @@
       <workItem from="1579197204831" duration="12505000" />
       <workItem from="1579472201730" duration="611000" />
       <workItem from="1579478115381" duration="1665000" />
-      <workItem from="1579792061249" duration="24544000" />
+      <workItem from="1579792061249" duration="43520000" />
+      <workItem from="1580816765194" duration="6361000" />
     </task>
     <servers />
   </component>
@@ -71,6 +73,10 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="628" y="123" key="FileChooserDialogImpl" timestamp="1580824417726">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="628" y="123" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1580824417726" />
     <state width="1345" height="133" key="GridCell.Tab.0.bottom" timestamp="1578971088352">
       <screen x="0" y="0" width="1366" height="728" />
     </state>

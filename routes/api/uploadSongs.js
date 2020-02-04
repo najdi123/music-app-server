@@ -1,5 +1,6 @@
 const express = require('express');
 const Song = require('../../models/Song');
+const User = require('../../models/User');
 const router = express.Router();
 const multer = require('multer');
 const verifyAuth = require('../../verifyToken');
@@ -188,17 +189,17 @@ router.put('/like/:id', verifyAuth, async (req, res) => {
         const song = await Song.findById(req.params.id);
 
         if (song.likes.filter(like => like.user.toString() === req.user._id).length > 0) {
-            return res.status(400).json({ message: 'Song already liked' });
+            return res.status(200).json({message: 'Song already liked'});
         }
 
-        song.likes.unshift({ user: req.user._id });
+        song.likes.unshift({user: req.user._id});
 
         await song.save();
 
         res.json(song.likes)
 
     } catch (err) {
-        console.error(err.message);
+        console.log(err.message);
         res.status(500).send('Server Error on like');
     }
 });
@@ -209,7 +210,7 @@ router.put('/unlike/:id', verifyAuth, async (req, res) => {
         const song = await Song.findById(req.params.id);
 
         if (song.likes.filter(like => like.user.toString() === req.user._id).length === 0) {
-            return res.status(400).json({ message: 'Song has not been liked yet' });
+            return res.status(400).json({message: 'Song has not been liked yet'});
             console.log('Song not liked')
         }
 
@@ -228,11 +229,97 @@ router.put('/unlike/:id', verifyAuth, async (req, res) => {
     }
 });
 
+router.get('/comments/:id', async (req, res) => {
+
+    console.log('get songs comments');
+    try {
+        const song = await Song.findById(req.params.id);
+        if (!song) {
+            return res.status(404).json({message: 'Song not found for comments'})
+        }
+
+        const comments = song.comments;
+        if (!comments) {
+            return res.status(404).json({message: 'Comments not found for song'})
+        }
+        res.json(comments);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error on get comments');
+    }
+});
+
+// route:    POST /api/comment/:id
+// @desc     Comment on a song
+// @access   Private
+router.post('/comment/:id', verifyAuth, async (req, res) => {
+        try {
+            const user = await User.findById(req.user._id);
+            const song = await Song.findById(req.params.id);
+
+            const newComment = {
+                text: req.body.text,
+                name: user.email,
+                user: req.user._id
+            };
+
+            song.comments.unshift(newComment);
+
+            await song.save();
+
+            res.json(song.comments);
+        } catch (err) {
+            console.error(err.message);
+            res.status(500).send('Server Error on comment');
+        }
+    }
+);
+
+// route:    DELETE /api/comment/:id/:comment_id
+// @desc     delete Comment on a song
+// @access   Private
+
+//verifyAuth,
+router.delete('/delete-comment/:id/:comment_id',verifyAuth,  async (req, res) => {
+    try {
+        const song = await Song.findById(req.params.id);
+        if (!song) {
+            return res.status(404).json({message: 'song does not exist'})
+        }
+
+        // console.log(req.params)
+        // pull the intended comment
+        const comment = song.comments.find(comment => comment.id === req.params.comment_id);
+
+        if (!comment) {
+            return res.status(404).json({message: 'comment does not exist'})
+        }
+        // console.log(req.user)
+        // check user
+        if (comment.user.toString() !== req.user._id) {
+            return res.status(401).json({message: 'User not authorized'})
+        }
+
+        const removeIndex = song.comments
+            .map(comment => comment.id)
+            .indexOf(req.params.comment_id);
+        song.comments.splice(removeIndex, 1);
+
+        await song.save();
+
+        res.json(song.comments)
+
+    } catch (e) {
+        console.error(e.message);
+        res.status(500).send('Server Error on delete comment');
+    }
+})
+
 var cpUpload = upload.fields([{name: "songURL", maxCount: 1}, {name: "imageURL", maxCount: 1}])
 router.post("/addSong", cpUpload, (req, res, next) => {
 
     console.log(req.files)
-    console.log('domdom')
+    // console.log('domdom')
 
 
     if (req.files.imageURL[0].fieldname === 'imageURL') {
